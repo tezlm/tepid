@@ -1,51 +1,56 @@
 require("dotenv").config();
-const intents = [
-	"GUILDS",
-	"GUILD_MEMBERS",
-	"GUILD_BANS",
-	"GUILD_EMOJIS_AND_STICKERS",
-	"GUILD_INTEGRATIONS",
-	"GUILD_WEBHOOKS",
-	"GUILD_INVITES",
-	"GUILD_VOICE_STATES",
-	"GUILD_PRESENCES",
-	"GUILD_MESSAGES",
-	"GUILD_MESSAGE_REACTIONS",
-	"GUILD_MESSAGE_TYPING",
-	"DIRECT_MESSAGES",
-	"DIRECT_MESSAGE_REACTIONS",
-	"DIRECT_MESSAGE_TYPING",
-];
-
+const fs = require("fs");
+const config = require("./config.json");
 const Discord = require("discord.js");
-const client = new Discord.Client({ intents });
+const client = new Discord.Client({ intents: config.intents });
 const commands = new Map();
 const listening = new Map();
 
-// manual loading for now
-// commands.set("status", require("./commands/status.js"));
-commands.set("say", require("./commands/say.js"));
-commands.set("whatis", require("./commands/whatis.js"));
+// load commands
+for(let cmd of fs.readdirSync("commands")) {
+	commands.set(cmd.match(/^[a-z]+/i)[0], require("./commands/" + cmd));
+}
 
+// set status
 client.on("ready", () => {
-	client.user.setActivity("vela uwu", { type: "WATCHING" });
+	client.user.setPresence({
+		activities: [{ name: "shrek", type: "STREAMING", url: "https://www.youtube.com/watch?v=z_HWtzUHm6s" }],
+		status: "idle"
+	});
 	console.log("ready");
 });
 
-client.on("messageCreate", async (msg) => {
-	// if(msg.author.bot) return;
-	if(msg.content[0] !== '$') return;
+// parse argv
+function parse(msg) {
+	if(msg.content[0] !== ':') return;
 	const argv = msg.content.slice(1).split(" ");
 	if(!commands.has(argv[0])) return;
-	listening.set(msg.id, await msg.channel.send(await commands.get(argv[0])(msg, argv)));
+	return commands.get(argv[0])(msg, argv);
+}
+
+// main bot
+client.on("messageCreate", async (msg) => {
+	const res = await parse(msg);
+	if(!res) return;
+	if(res instanceof Discord.MessageEmbed) {
+		listening.set(msg.id, await msg.reply({ embeds: [res] }));
+	} else if(res instanceof Discord.Message) {
+		listening.set(msg.id, res);
+	} else {
+		listening.set(msg.id, await msg.reply(res));
+	}
 });
 
 client.on("messageUpdate", async (old, msg) => {
 	if(!listening.has(msg.id)) return;
 	const sent = listening.get(msg.id);
-	const argv = msg.content.slice(1).split(" ");
-	if(!commands.has(argv[0])) return;
-	await sent.edit(msg, await commands.get(argv[0])(msg, argv));
+	const res = await parse(msg);
+	if(!res) return;
+	if(res instanceof Discord.MessageEmbed) {
+		await sent.edit({ embeds: [res] });
+	} else {
+		await sent.edit(res);
+	}
 });
 
 client.on("messageDelete", async (msg) => {

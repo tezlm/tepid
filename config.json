@@ -1,0 +1,55 @@
+{
+	"emojis": {
+		"desktop": {
+			"online":  "<:online_desktop:874097598527598634>",
+			"idle":    "<:idle_desktop:874097598565339157>",
+			"dnd":     "<:dnd_desktop:874097598867308554>"
+		},
+		"web": {
+			"online":  "<:online_web:874097599068639262>",
+			"idle":    "<:idle_web:874097598875717742>",
+			"dnd":     "<:dnd_mobile:874097599043485757>"
+		},
+		"mobile": {
+			"online":  "<:online_mobile:874097598737309737>",
+			"idle":    "<:idle_mobile:874097598485631017>",
+			"dnd":     "<:dnd_web:874097598888304671>"
+		},
+		"offline":     "<:offline:874097599047667722>",
+		"badges": {
+			"BUGHUNTER_LEVEL_1":            "<:bug_hunter:873681120359772240>",
+			"BUGHUNTER_LEVEL_2":            "<:bug_hunter:873681120359772240>",
+			"HOUSE_BRILLIANCE":             "<:brilliance:873681120900825148>",
+			"HOUSE_BRAVERY":                "<:bravery:873681120959557694>",
+			"HOUSE_BALANCE":                "<:balance:873681120359759892>",
+			"EARLY_SUPPORTER":              "<:early_supporter:873681119655133194>",
+			"HYPESQUAD_EVENTS":             "<:hypesquad_events:873681121429291029>",
+			"DISCORD_EMPLOYEE":             "<:staff:873681121647419392>",
+			"PARTNERED_SERVER_OWNER":       "<:partner:873681121458667530>",
+			"EARLY_VERIFIED_BOT_DEVELOPER": "<:verified_developer:873681117419556874>",
+			"VERIFIED_BOT":                 "<:bot1:874476351246196837><:bot2:874476351334268988>+"
+		},
+		"bot": "<:bot1:874476351246196837><:bot2:874476351334268988>"
+	},
+	"intents": [
+		"GUILDS",
+		"GUILD_MEMBERS",
+		"GUILD_BANS",
+		"GUILD_EMOJIS_AND_STICKERS",
+		"GUILD_INTEGRATIONS",
+		"GUILD_WEBHOOKS",
+		"GUILD_INVITES",
+		"GUILD_VOICE_STATES",
+		"GUILD_PRESENCES",
+		"GUILD_MESSAGES",
+		"GUILD_MESSAGE_REACTIONS",
+		"GUILD_MESSAGE_TYPING",
+		"DIRECT_MESSAGES",
+		"DIRECT_MESSAGE_REACTIONS",
+		"DIRECT_MESSAGE_TYPING"
+	],
+	"color": {
+		"default": "0x2cb1dd",
+		"error": "0xf22c0e"
+	}
+}

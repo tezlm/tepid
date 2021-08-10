@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bent": "^7.3.12",
-    "discord.js": "^13.0.1"
+    "discord.js": "^13.0.1",
+    "dotenv": "^10.0.0"
   }
 }
