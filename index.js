@@ -15,7 +15,7 @@ for(let cmd of fs.readdirSync("commands")) {
 client.on("ready", () => {
 	client.user.setPresence({
 		activities: [{ name: "shrek", type: "STREAMING", url: "https://www.youtube.com/watch?v=z_HWtzUHm6s" }],
-		status: "idle"
+		status: "idle",
 	});
 	console.log("ready");
 });
@@ -44,6 +44,7 @@ client.on("messageCreate", async (msg) => {
 client.on("messageUpdate", async (old, msg) => {
 	if(!listening.has(msg.id)) return;
 	const sent = listening.get(msg.id);
+	if(sent.deleted) return;
 	const res = await parse(msg);
 	if(!res) return;
 	if(res instanceof Discord.MessageEmbed) {
@@ -55,7 +56,14 @@ client.on("messageUpdate", async (old, msg) => {
 
 client.on("messageDelete", async (msg) => {
 	if(!listening.has(msg.id)) return;
+	if(listening.get(msg.id).deleted) return;
 	await listening.get(msg.id).delete();
 });
+
+// client.on("messageDelete", async (msg) => {
+	// if(!listening.has(msg.id)) return;
+	// if(listening.get(msg.id).deleted) return;
+	// await listening.get(msg.id).delete();
+// });
 
 client.login(process.env.TOKEN);

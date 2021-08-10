@@ -1,20 +1,21 @@
 const Discord = require("discord.js");
-const { emojis } = require("../config.json");
+const { emojis, color } = require("../config.json");
 const delay = ms => new Promise((res) => setTimeout(res, ms));
 
-function getStatus(msg) {
-	const status = msg.member.presence.clientStatus;
+function getStatus(member) {
+	const status = member?.presence?.clientStatus;
+	if(!status) return `${emojis.offline} offline/invis`;
 	for(let i in status) {
 		return `${emojis[i][status[i]]} ${status[i]}`;
 	}
 	return `${emojis.offline} offline/invis`;
 }
 
-function getEmbed(msg) {
-	const pfp = msg.author.displayAvatarURL({ size: 4096, format: "png" });
+function getEmbed(member) {
+	const pfp = member.user.displayAvatarURL({ size: 4096, format: "png" });
 	return new Discord.MessageEmbed()
 		.setTitle("user info")
-		.setAuthor(msg.author.tag + (msg.author.bot ? emojis.bot : ""), pfp, pfp)
+		.setAuthor(member.user.tag, pfp, pfp)
 }
 
 function updateEmbed(embed, old, cur) {
@@ -36,42 +37,54 @@ function updateEmbed(embed, old, cur) {
 	return changed;
 }
 
-/*
-missing badges:
-
-TEAM_USER
-BUGHUNTER_LEVEL_2
-VERIFIED_BOT
-DISCORD_CERTIFIED_MODERATOR
-*/
-
-function getData(msg) {
+function getData(member) {
+	let badges = member.user.flags?.toArray().map(i => emojis.badges[i]).filter(i => i).join(" ") ?? "";
+	if(member.user.bot) badges += " " + emojis.bot;
 	return {
-		color: msg.member.displayColor || 0x2CB1DD,
+		color: member.displayColor || 0x2CB1DD,
 		fields: {
-			status: getStatus(msg),
-			// bot: msg.author.bot.toString(),
-			id: msg.author.id,
-			badges: msg.author.flags.toArray().map(i => emojis.badges[i]).filter(i => i).join(" "),
+			status: getStatus(member),
+			id: member.user.id,
+			created: `<t:${Math.floor(member.user.createdTimestamp / 1000)}>`,
+			nickname: member.nickname,
+			badges,
 		}
 	};
 }
 
-async function update(embed, msg, sent) {
-	let old = getData(msg);
+async function update(embed, member, msg, sent) {
+	let old = getData(member);
 	while(!msg.deleted) {
-		let cur = getData(msg);
+		let cur = getData(member);
 		if(updateEmbed(embed, old, cur)) sent.edit({ embeds: [embed] });
 		old = cur;
-		await delay(1000);
+		await delay(500);
 	}
 }
 
+async function getMember(msg, argv) {
+	if(argv[1]) {
+		try {
+			return await msg.guild.members.fetch((argv[1].match(/[0-9]+/) || " ")[0]);
+		} catch {
+			return null;
+		}
+	}
+	return msg.member;
+	
+}
+
 module.exports = async (msg, argv) => {
-	const embed = getEmbed(msg);
-	updateEmbed(embed, { fields: {} }, getData(msg));
+	const member = await getMember(msg, argv);
+	if(!member) {
+		return new Discord.MessageEmbed()
+			.setTitle("couldnt find that user")
+			.setColor(color.error);
+	}
+	const embed = getEmbed(member);
+	updateEmbed(embed, { fields: {} }, getData(member));
 	const sent = await msg.reply({ embeds: [embed] });
-	update(embed, msg, sent);
+	update(embed, member, msg, sent);
 	return sent;
 }
 

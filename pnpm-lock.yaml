@@ -4,11 +4,13 @@ specifiers:
   bent: ^7.3.12
   discord.js: ^13.0.1
   dotenv: ^10.0.0
+  fuzzysort: ^1.1.4
 
 dependencies:
   bent: 7.3.12
   discord.js: 13.0.1
   dotenv: 10.0.0
+  fuzzysort: 1.1.4
 
 packages:
 
@@ -126,6 +128,10 @@ packages:
   /dotenv/10.0.0:
     resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
     engines: {node: '>=10'}
+    dev: false
+
+  /fuzzysort/1.1.4:
+    resolution: {integrity: sha512-JzK/lHjVZ6joAg3OnCjylwYXYVjRiwTY6Yb25LvfpJHK8bjisfnZJ5bY8aVWwTwCXgxPNgLAtmHL+Hs5q1ddLQ==}
     dev: false
 
   /is-obj/2.0.0:
