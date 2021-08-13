@@ -114,6 +114,6 @@ load("qmelz/hackustry");
 // load("ppy/osu");
 load("torvalds/linux");
 // load("nodejs/node");
-// load("sample-text-here/community-mod");
+load("sample-text-here/community-mod");
 load("sh1penfire/endless-rusting");
 load("meltdown-altair/opposing-front");

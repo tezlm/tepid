@@ -76,11 +76,7 @@ async function getMember(msg, argv) {
 
 module.exports = async (msg, argv) => {
 	const member = await getMember(msg, argv);
-	if(!member) {
-		return new Discord.MessageEmbed()
-			.setTitle("couldnt find that user")
-			.setColor(color.error);
-	}
+	if(!member) throw "couldn't find that user";
 	const embed = getEmbed(member);
 	updateEmbed(embed, { fields: {} }, getData(member));
 	const sent = await msg.reply({ embeds: [embed] });

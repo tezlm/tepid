@@ -27,12 +27,7 @@ function parseWolfram(obj) {
 }
 
 module.exports = async (msg, argv) => {
-	if(!argv[1]) {
-		return new MessageEmbed({
-			title: "missing search query",
-			color: config.color.error,
-		});
-	}
+	if(!argv[1]) throw "missing search query";
 	const input = encodeURIComponent(argv.slice(1).join(" "));
 	const math = parseWolfram(await wolfram(input));
 	if(math !== null) {	
@@ -47,12 +42,7 @@ module.exports = async (msg, argv) => {
 	const [, title, , url] = await search(input);
 	const data = getPage(await info(encodeURIComponent(title)));
 	const thumb = getPage(await thumbnail(encodeURIComponent(title)));
-	if(!data) {
-		return new MessageEmbed({
-			title: "couldnt find that",
-			color: config.color.error,
-		});
-	}
+	if(!data) throw "couldnt find that";
 	const embed = new MessageEmbed();
 	embed.setTitle(title[0]);
 	embed.setURL(url[0]);

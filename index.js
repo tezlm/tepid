@@ -21,13 +21,18 @@ client.on("ready", () => {
 });
 
 // parse argv
-function parse(msg) {
+async function parse(msg) {
 	if(msg.content[0] !== ':') return;
 	const argv = msg.content.slice(1).split(" ");
 	if(!commands.has(argv[0])) return;
-	return commands.get(argv[0])(msg, argv);
+	try {
+		return await commands.get(argv[0])(msg, argv);
+	} catch(err) {
+		return new Discord.MessageEmbed()
+			.setTitle(err)
+			.setColor(config.color.error);
+	}
 }
-
 // main bot
 client.on("messageCreate", async (msg) => {
 	const res = await parse(msg);
@@ -36,7 +41,7 @@ client.on("messageCreate", async (msg) => {
 		listening.set(msg.id, await msg.reply({ embeds: [res] }));
 	} else if(res instanceof Discord.Message) {
 		listening.set(msg.id, res);
-	} else {
+	} else if(res) {
 		listening.set(msg.id, await msg.reply(res));
 	}
 });
