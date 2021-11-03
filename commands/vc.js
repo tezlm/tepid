@@ -4,7 +4,6 @@ const ytdl = require("ytdl-core");
 const fs = require("fs");
 const states = new Map();
 const audio = [];
-// a state is [vccontroller, audiocontroller, name, queue]
 
 for(let i of fs.readdirSync("assets")) {
 	audio.push([i, VC.createAudioResource("assets/" + i)]);

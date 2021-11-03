@@ -6,7 +6,7 @@ const fuzzysort = require("fuzzysort");
 const bent = require("bent")("json", "https://api.github.com/", { "User-Agent": "lollolol" });
 const fetch = require("bent")("string", "https://raw.githubusercontent.com/");
 const fetchFile = (repo, file) => fetch(`${repo}/master/${file}`);
-const link = (repo, file) => `https://github.com/${repo}/blob/master/${file}`;
+const link = (repo, file) => `https://github.com/${repo}/blob/master/${encodeURIComponent(file)}`;
 const day = Date.now() + 1000 * 60 * 60 * 24;
 const files = [];
 const cache = new Map();
@@ -60,7 +60,7 @@ async function load(repo) {
 async function getFile(embed, { repo, path }) {
 	const ext = extname(path).slice(1);
 	if(exts.images.includes(ext)) {
-		embed.setImage(`https://raw.githubusercontent.com/${repo}/master/${path}`);
+		embed.setImage(`https://raw.githubusercontent.com/${repo}/master/${encodeURIComponent(path)}`);
 	} else if(exts.text.includes(ext)) {
 		if(!cache.has(`${repo}:${path}`)) {
 			const fetched = await fetchFile(repo, path);
@@ -71,7 +71,7 @@ async function getFile(embed, { repo, path }) {
 			});
 		}
 		const got = cache.get(`${repo}:${path}`);
-		embed.setDescription("```" + (ext === "hjson" ? "yml" : ext) + "\n" + got.view + "\n```");
+		embed.setDescription("```" + (ext === "hjson" ? "js" : ext) + "\n" + got.view + "\n```");
 		embed.addField("length", got.len.toString(), true);
 		embed.addField("lines", got.lines.toString(), true);
 	} else {
@@ -114,6 +114,8 @@ load("qmelz/hackustry");
 // load("ppy/osu");
 load("torvalds/linux");
 // load("nodejs/node");
-load("sample-text-here/community-mod");
+// load("sample-text-here/community-mod");
 load("sh1penfire/endless-rusting");
-load("meltdown-altair/opposing-front");
+// load("meltdown-altair/opposing-front");
+load("Pietro303HD/ShitShow");
+

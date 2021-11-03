@@ -2,6 +2,19 @@ const Discord = require("discord.js");
 const { emojis, color } = require("../config.json");
 const delay = ms => new Promise((res) => setTimeout(res, ms));
 
+async function getMember(msg, argv) {
+	if(!argv[1]) return msg.member;
+	const id = argv[1].match(/[0-9]+/)?.[0] || "";
+	const member = msg.guild.members.cache.get(id);
+	if(member) return member;
+	const guilds = [];
+	msg.client.guilds.cache.each(g => guilds.push(g));
+	for(let guild of guilds) {
+		const member = await guild.members.fetch(id).catch(() => null);
+		if(member) return member;
+	}
+}
+
 function getStatus(member) {
 	const status = member?.presence?.clientStatus;
 	if(!status) return `${emojis.offline} offline/invis`;
@@ -60,18 +73,6 @@ async function update(embed, member, msg, sent) {
 		old = cur;
 		await delay(500);
 	}
-}
-
-async function getMember(msg, argv) {
-	if(argv[1]) {
-		try {
-			return await msg.guild.members.fetch((argv[1].match(/[0-9]+/) || " ")[0]);
-		} catch {
-			return null;
-		}
-	}
-	return msg.member;
-	
 }
 
 module.exports = async (msg, argv) => {
