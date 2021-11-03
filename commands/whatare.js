@@ -1,1 +1,2 @@
-module.exports = require("./whatis.js");
+export * from "./whatis.js";
+

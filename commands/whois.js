@@ -1,5 +1,6 @@
-const Discord = require("discord.js");
-const { emojis, color } = require("../config.json");
+import Discord from "discord.js";
+import config from "../config.js";
+const { emojis } = config;
 const delay = ms => new Promise((res) => setTimeout(res, ms));
 
 async function getMember(msg, argv) {
@@ -75,7 +76,7 @@ async function update(embed, member, msg, sent) {
 	}
 }
 
-module.exports = async (msg, argv) => {
+export default async (msg, argv) => {
 	const member = await getMember(msg, argv);
 	if(!member) throw "couldn't find that user";
 	const embed = getEmbed(member);

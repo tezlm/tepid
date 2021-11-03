@@ -1,5 +1,5 @@
-const config = require("../config.json");
+import config from "../config.js";
 
-module.exports = (msg) => {
+export default (msg) => {
 	msg.react(config.emojis.pong);
 }

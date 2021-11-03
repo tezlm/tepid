@@ -1,10 +1,11 @@
-const config = require("../config.json");
-const { basename, extname, dirname } = require("path");
-const { MessageEmbed } = require("discord.js");
-const fs = require("fs");
-const fuzzysort = require("fuzzysort");
-const bent = require("bent")("json", "https://api.github.com/", { "User-Agent": "lollolol" });
-const fetch = require("bent")("string", "https://raw.githubusercontent.com/");
+import config from "../config.js";
+import { basename, extname, dirname } from "path";
+import { MessageEmbed } from "discord.js";
+import fs from "fs";
+import fuzzysort from "fuzzysort";
+import bent from "bent";
+const gh = bent("json", "https://api.github.com/", { "User-Agent": "lollolol" });
+const fetch = bent("string", "https://raw.githubusercontent.com/");
 const fetchFile = (repo, file) => fetch(`${repo}/master/${file}`);
 const link = (repo, file) => `https://github.com/${repo}/blob/master/${encodeURIComponent(file)}`;
 const day = Date.now() + 1000 * 60 * 60 * 24;
@@ -28,7 +29,7 @@ function firstNLines(str, n = 20) {
 async function fetchTree(repo) {
 	for(let branch of ["master", "main"]) {
 		try {
-			return await bent(`repos/${repo}/git/trees/${branch}?recursive=true`)
+			return await gh(`repos/${repo}/git/trees/${branch}?recursive=true`)
 		} catch {}
 	}
 	throw "cannot find " + repo;
@@ -80,7 +81,7 @@ async function getFile(embed, { repo, path }) {
 	embed.addField("repo", repo, true);
 }
 
-module.exports = async (msg, argv) => {
+export default async (msg, argv) => {
 	const search = argv.slice(1).join(" ");
 	if(!search) return new MessageEmbed().setTitle("no search").setColor(config.color.default);
 	const results = fuzzysort.go(search, files, { limit: 5, threshold: -500, key: "key" });

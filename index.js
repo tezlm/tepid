@@ -1,14 +1,16 @@
-require("dotenv").config();
-const fs = require("fs");
-const config = require("./config.json");
-const Discord = require("discord.js");
+import dotenv from "dotenv";
+dotenv.config();
+
+import fs from "fs";
+import config from "./config.js";
+import Discord from "discord.js";
 const client = new Discord.Client({ intents: config.intents });
 const commands = new Map();
 const listening = new Map();
 
 // load commands
 for(let cmd of fs.readdirSync("commands")) {
-	commands.set(cmd.match(/^[a-z]+/i)[0], require("./commands/" + cmd));
+	commands.set(cmd.match(/^[a-z]+/i)[0], await import("./commands/" + cmd));
 }
 
 // set status

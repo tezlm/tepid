@@ -1,4 +1,8 @@
 {
+	"name": "tepidlemonade2",
+	"description": "the second iteration of tepidlemonade",
+	"author": "tezlm",
+	"type": "module",
 	"dependencies": {
 		"@discordjs/voice": "^0.7.2",
 		"bent": "^7.3.12",

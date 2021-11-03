@@ -1,10 +1,11 @@
-const config = require("../config.json");
-const { MessageEmbed } = require("discord.js");
-const bent = require("bent")("json", "https://en.wikipedia.org/w/api.php");
-const fetch = require("bent")("json");
-const search = query => bent(`?format=json&action=opensearch&search=${query}&namespace=0&limit=1&redirects=resolve`);
-const info = page => bent(`?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${page}`);
-const thumbnail = page => bent(`?action=query&titles=${page}&prop=pageimages&format=json&pithumbsize=600`);
+import config from "../config.js";
+import { MessageEmbed } from "discord.js";
+import bent from "bent";
+const wiki = bent("json", "https://en.wikipedia.org/w/api.php");
+const fetch = bent("json");
+const search = query => wiki(`?format=json&action=opensearch&search=${query}&namespace=0&limit=1&redirects=resolve`);
+const info = page => wiki(`?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${page}`);
+const thumbnail = page => wiki(`?action=query&titles=${page}&prop=pageimages&format=json&pithumbsize=600`);
 const wolfram = query => fetch(`https://www.wolframalpha.com/n/v1/api/autocomplete/?i=${query}`);
 const wikipediaIcon = "https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/600px-Wikipedia-logo-v2.svg.png";
 const wolframIcon = "https://media.discordapp.net/attachments/777553502431084565/874516342559105085/unknown.png";
@@ -26,7 +27,7 @@ function parseWolfram(obj) {
 	return obj.instantMath.exactResult || obj.instantMath.approximateResult;
 }
 
-module.exports = async (msg, argv) => {
+export default async (msg, argv) => {
 	if(!argv[1]) throw "missing search query";
 	const input = encodeURIComponent(argv.slice(1).join(" "));
 	const math = parseWolfram(await wolfram(input));

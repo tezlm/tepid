@@ -1,7 +1,7 @@
-const VC = require("@discordjs/voice");
-const ytsr = require("ytsr");
-const ytdl = require("ytdl-core");
-const fs = require("fs");
+import * as VC from "@discordjs/voice";
+import ytsr from "ytsr";
+import ytdl from "ytdl-core";
+import fs from "fs";
 const states = new Map();
 const audio = [];
 
@@ -74,7 +74,7 @@ async function createAudio(state) {
 	state.conn.subscribe(state.audio);
 }
 
-module.exports = async (msg, argv, old) => {
+export default async (msg, argv, old) => {
 	const { channel } = msg.member.voice;
 	if(!channel) throw "you need to be in a channel";
 	if(channel.type !== "GUILD_VOICE") throw "not a voice channel";
