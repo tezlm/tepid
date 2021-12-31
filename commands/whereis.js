@@ -81,10 +81,10 @@ async function getFile(embed, { repo, path }) {
 	embed.addField("repo", repo, true);
 }
 
-export default async (msg, argv) => {
+export default async (_msg, argv) => {
 	const search = argv.slice(1).join(" ");
 	if(!search) return new MessageEmbed().setTitle("no search").setColor(config.color.default);
-	const results = fuzzysort.go(search, files, { limit: 5, threshold: -500, key: "key" });
+	const results = fuzzysort.go(search, files, { limit: 15, threshold: -500, key: "key" });
 	const exact = results.length === 1 ? results[0] : results.find(i => i.score === 0);
 	if(exact) {
 		const res = exact.obj;
@@ -95,7 +95,14 @@ export default async (msg, argv) => {
 		await getFile(embed, res);
 		return embed;
 	} else if(results.length) {
-		const links = results.map(i => `[${i.obj.name}](${link(i.obj.repo, i.obj.path)})`);
+		const isText = thing => exts.text.includes(extname(thing.obj.name).slice(1));
+		const files = [], nottext = [];
+		for(let i of results)
+			isText(i) ? files.push(i) : nottext.push(i);
+		files.push(...nottext);
+		const links = files
+			.slice(0, 6)
+			.map(i => `[${i.obj.name}](${link(i.obj.repo, i.obj.path)})`);
 		return new MessageEmbed()
 			.setDescription(links.join("\n"))
 			.setColor(config.color.default);
@@ -108,15 +115,15 @@ export default async (msg, argv) => {
 
 load("anuken/mindustry");
 load("anuken/arc");
-load("sk7725/betamindy");
-load("sh1penfire/pixelcraft");
-load("bluewolf3682/exotic-mod");
-load("qmelz/hackustry");
+// load("sk7725/betamindy");
+// load("sh1penfire/pixelcraft");
+// load("bluewolf3682/exotic-mod");
+// load("qmelz/hackustry");
 // load("ppy/osu");
-load("torvalds/linux");
+// load("torvalds/linux");
 // load("nodejs/node");
 // load("sample-text-here/community-mod");
-load("sh1penfire/endless-rusting");
+// load("sh1penfire/endless-rusting");
 // load("meltdown-altair/opposing-front");
-load("Pietro303HD/ShitShow");
+// load("Pietro303HD/ShitShow");
 

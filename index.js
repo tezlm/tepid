@@ -3,6 +3,7 @@ dotenv.config();
 
 import fs from "fs";
 import config from "./config.js";
+import handlers from "./messages.js";
 import Discord from "discord.js";
 const client = new Discord.Client({ intents: config.intents });
 const commands = new Map();
@@ -10,13 +11,14 @@ const listening = new Map();
 
 // load commands
 for(let cmd of fs.readdirSync("commands")) {
-	commands.set(cmd.match(/^[a-z]+/i)[0], await import("./commands/" + cmd));
+	const { default: fn } = await import("./commands/" + cmd);
+	commands.set(cmd.match(/^[a-z]+/i)[0], fn);
 }
 
 // set status
 client.on("ready", () => {
 	client.user.setPresence({
-		activities: [{ name: "shrek", type: "STREAMING", url: "https://www.youtube.com/watch?v=z_HWtzUHm6s" }],
+		activities: [{ name: "epic 360 noscopes", type: "STREAMING", url: "https://www.youtube.com/watch?v=z_HWtzUHm6s" }],
 		status: "idle",
 	});
 	console.log("ready");
@@ -24,15 +26,22 @@ client.on("ready", () => {
 
 // parse argv
 async function parse(msg, sent) {
-	if(msg.content[0] !== ':') return;
+	for(let handle of handlers) {
+		const res = await handle(msg, sent)
+			.catch(createError);
+		if(res !== undefined) return res;
+	}
+	if(msg.content[0] !== ';') return;
 	const argv = msg.content.slice(1).split(" ");
 	if(!commands.has(argv[0])) return;
-	try {
-		return await commands.get(argv[0])(msg, argv, sent);
-	} catch(err) {
-		return new Discord.MessageEmbed()
-			.setTitle(err)
-			.setColor(config.color.error);
+	return commands.get(argv[0])(msg, argv, sent)
+		.catch(createError);
+
+	function createError(err) {
+		return "error: " + err.toString();
+//		return new Discord.MessageEmbed()
+//			.setTitle(err.toString())
+//			.setColor(config.color.error);
 	}
 }
 
@@ -49,7 +58,7 @@ client.on("messageCreate", async (msg) => {
 	}
 });
 
-client.on("messageUpdate", async (old, msg) => {
+client.on("messageUpdate", async (_, msg) => {
 	if(!listening.has(msg.id)) return;
 	const sent = listening.get(msg.id);
 	if(sent.deleted) return;
@@ -69,3 +78,4 @@ client.on("messageDelete", async (msg) => {
 });
 
 client.login(process.env.TOKEN);
+

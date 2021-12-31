@@ -50,6 +50,7 @@ export default async (msg, argv) => {
 	embed.setColor(config.color.default);
 	embed.setDescription(trim(data.extract));
 	embed.setAuthor("wikipedia", wikipediaIcon, "https://wikipedia.org");
+	embed.setTimestamp();
 	if(thumb.thumbnail?.source) embed.setThumbnail(thumb.thumbnail.source);
 	return embed;
 }

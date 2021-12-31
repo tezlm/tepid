@@ -1,10 +1,12 @@
 {
-	"name": "tepidlemonade2",
-	"description": "the second iteration of tepidlemonade",
+	"name": "tepid",
+	"description": "my bot",
 	"author": "tezlm",
+	"version": "1.0.0",
 	"type": "module",
 	"dependencies": {
-		"@discordjs/voice": "^0.7.2",
+		"@discordjs/opus": "^0.7.0",
+		"@discordjs/voice": "^0.7.5",
 		"bent": "^7.3.12",
 		"discord.js": "^13.3.1",
 		"dotenv": "^10.0.0",

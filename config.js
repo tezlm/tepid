@@ -31,6 +31,7 @@ export default {
 		},
 		bot:  "<:bot1:874476351246196837><:bot2:874476351334268988>",
 		pong: "🏓",
+		warn: "⚠️",
 	},
 	intents: [
 		"GUILDS",
@@ -52,5 +53,8 @@ export default {
 	color: {
 		default: 0x2cb1dd,
 		error: 0xf22c0e,
-	}
+	},
+	users: {
+		zesty: "659922105789579321",
+	},
 }

@@ -62,7 +62,7 @@ async function next(id) {
 async function load(id, song) {
 	const state = states.get(id);
 	state.name = song[0];
-	state.audio.play(song[1]);	
+	state.audio.play(song[1]);
 }
 
 async function createAudio(state) {
@@ -79,6 +79,9 @@ export default async (msg, argv, old) => {
 	if(!channel) throw "you need to be in a channel";
 	if(channel.type !== "GUILD_VOICE") throw "not a voice channel";
 	switch(argv[1]) {
+		case "rate": {
+			return `you rate it ${argv[2]}`;
+		}
 		case "join": {
 			if(states.has(channel.guild.id)) throw "already in a voice channel";
 			await join(channel);
