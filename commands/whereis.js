@@ -118,7 +118,7 @@ load("anuken/arc");
 // load("sk7725/betamindy");
 // load("sh1penfire/pixelcraft");
 // load("bluewolf3682/exotic-mod");
-// load("qmelz/hackustry");
+load("qmelz/hackustry");
 // load("ppy/osu");
 // load("torvalds/linux");
 // load("nodejs/node");
@@ -126,4 +126,5 @@ load("anuken/arc");
 // load("sh1penfire/endless-rusting");
 // load("meltdown-altair/opposing-front");
 // load("Pietro303HD/ShitShow");
+load("tezlm/tepid");
 
