@@ -8,10 +8,11 @@
 		"@discordjs/opus": "^0.7.0",
 		"@discordjs/voice": "^0.7.5",
 		"bent": "^7.3.12",
-		"discord.js": "^13.3.1",
+		"discord.js": "^13.6.0",
 		"dotenv": "^10.0.0",
-		"fuzzysort": "^1.1.4",
-		"ytdl-core": "^4.9.1",
-		"ytsr": "^3.5.3"
+		"fuzzysort": "^1.2.1",
+		"libsodium-wrappers": "^0.7.10",
+		"ytdl-core": "^4.11.0",
+		"ytsr": "^3.7.0"
 	}
 }

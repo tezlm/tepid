@@ -10,7 +10,7 @@ for(let i of fs.readdirSync("assets")) {
 }
 
 async function getSong(str) {
-	if(!str) audio[Math.floor(Math.random() * audio.length)];
+	if(!str) return audio[Math.floor(Math.random() * audio.length)];
 	if(ytdl.validateURL(str.replace(/(^<|>$)/g, ""))) {
 		try {
 			str = str.replace(/(^<|>$)/g, "");
@@ -54,7 +54,7 @@ async function next(id) {
 	const state = states.get(id);
 	const pop = state.queue.pop();
 	state.audio.stop();
-	if(!pop) return;
+	if(pop === undefined) return;
 	await load(id, await getSong(pop));
 	state.audio.once("idle", () => next(id));
 }
