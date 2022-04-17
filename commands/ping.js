@@ -1,5 +1,5 @@
 import config from "../config.js";
 
-export default (msg) => {
+export default async (msg) => {
 	msg.react(config.emojis.pong);
 }

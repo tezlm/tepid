@@ -38,10 +38,10 @@ async function parse(msg, sent) {
 		.catch(createError);
 
 	function createError(err) {
-		return "error: " + err.toString();
-//		return new Discord.MessageEmbed()
-//			.setTitle(err.toString())
-//			.setColor(config.color.error);
+//		return "error: " + err.toString();
+		return new Discord.MessageEmbed()
+			.setTitle(err.toString())
+			.setColor(config.color.error);
 	}
 }
 
